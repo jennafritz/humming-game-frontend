@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import HomePageContainer from "./Container/HomePageContainer"
+import PlayersContainer from "./Container/PlayersContainer"
+import GameSetupContainer from "./Container/GameSetupContainer"
+import GamePlayContainer from "./Container/GamePlayContainer"
+import EndOfGameContainer from "./Container/EndOfGameContainer"
+// import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <HomePageContainer />
+      <PlayersContainer />
+      <GameSetupContainer />
+      <GamePlayContainer />
+      <EndOfGameContainer />
     </div>
   );
 }
 
-export default App;
+export default App
