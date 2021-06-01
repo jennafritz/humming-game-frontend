@@ -12,7 +12,8 @@ class App extends Component {
     super()
     this.state = {
       songs: [],
-      players: []
+      players: [],
+      currentGame:{}
     }
   }
 
@@ -33,8 +34,24 @@ class App extends Component {
     // create a PlayerGame
   }
 
+  createUserGames = () => {
+    this.state.players.map(player => {
+      fetch("http://localhost:9292/user_games", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: player.id,
+          game_id: this.state.currentGame.id
+        })
+      })
+      .then(res => res.json())
+      .then(response => console.log(response))
+    })
+  }
 
-  checkUser = (userObj) => {
+  handleLogin = (userObj) => {
     // userObj has username and password from state
     // send it to backend
     let searchedObj = {}
@@ -48,25 +65,7 @@ class App extends Component {
 
         // make a post req if user not found
         if (searchedObj.message === "User does not exist") {
-          
-
-
-
-          fetch("http://localhost:9292/users", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userObj)
-          })
-            .then(res => res.json())
-            .then(newUserObj => {
-              this.setState({
-
-              })
-            }
-              // newUserObj => console.log(newUserObj)
-            )
+          alert("User not found. Please register to continue.")
         }
         // otherwise get the user
         else {
@@ -80,8 +79,22 @@ class App extends Component {
   }
 
 
-  handleUser = () => {
-
+  handleRegister = (userObj) => {
+    fetch("http://localhost:9292/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userObj)
+    })
+      .then(res => res.json())
+      .then(newUserObj => {
+        this.setState({
+          players: [...this.state.players, newUserObj]
+        })
+      }
+        // newUserObj => console.log(newUserObj)
+      )
   }
 
 
@@ -99,14 +112,16 @@ class App extends Component {
       })
     })
       .then(res => res.json())
-      .then((newGameInstance) => console.log(newGameInstance))
+      .then((newGameInstance) => this.setState({
+        currentGame: newGameInstance
+      }))
   }
 
   render() {
     return (
       <div className="App" >
         <HomePageContainer handleNewGame={this.handleNewGame} />
-        <PlayerSetupContainer checkUser={this.checkUser} players={this.state.players} />
+        <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames}/>
         <GameSetupContainer />
         <GamePlayContainer />
         <EndOfGameContainer />

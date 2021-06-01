@@ -1,33 +1,42 @@
 import React, { Component } from "react"
 import PlayersContainer from "./PlayersContainer"
+import LoginForm from "../Component/LoginForm"
+import RegisterForm from "../Component/RegisterForm"
 
 export default class PlayerSetupContainer extends Component {
 
     constructor() {
         super()
         this.state = {
-            username: "",
-            password: ""
+            displayLoginForm: false,
+            displayRegisterForm: false,
         }
     }
+
+    toggleLoginForm = () => {
+        // console.log("display login")
+        this.setState({
+            displayLoginForm: !this.state.displayLoginForm
+        })
+    }
+
+    toggleRegisterForm = () => {
+        // console.log("display login")
+        this.setState({
+            displayRegisterForm: !this.state.displayRegisterForm
+        })
+    }
+
+
 
     render() {
         return (
             <div>
                 Player Setup Container
                 <PlayersContainer players={this.props.players} />
-                <form onSubmit={(event) => {
-                    event.preventDefault()
-                    this.props.checkUser(this.state)
-                }}>
-                    <label >Username:
-                        <input onChange={(event) => { this.setState({ username: event.target.value }) }} type="text" name="username" value={this.state.username} />
-                    </label>
-                    <label>Password:
-                        <input onChange={(event) => { this.setState({ password: event.target.value }) }} type="password" name="password" value={this.state.password} />
-                    </label>
-                    <input type="submit" />
-                </form>
+                {this.state.displayLoginForm ? <LoginForm toggleLoginForm = {this.toggleLoginForm} handleLogin = {this.props.handleLogin}/> : <button onClick={() => this.toggleLoginForm()} >Add registered player</button>}
+                {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm = {this.toggleRegisterForm} handleRegister = {this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
+                <button onClick={() => this.props.createUserGames()}>Start</button> 
             </div>
         )
     }
