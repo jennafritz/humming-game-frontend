@@ -6,7 +6,7 @@ export default class PlayersContainer extends Component {
         return (
             <div>
                 Players Container
-                <Player />
+                {this.props.players.map(player => <Player key={player.id} name={player.username}/>)}
             </div>
         )
     }

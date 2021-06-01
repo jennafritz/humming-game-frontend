@@ -15,10 +15,10 @@ export default class PlayerSetupContainer extends Component {
         return (
             <div>
                 Player Setup Container
-                <PlayersContainer />
+                <PlayersContainer players={this.props.players} />
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    this.props.handleSubmit(this.state)
+                    this.props.checkUser(this.state)
                 }}>
                     <label >Username:
                         <input onChange={(event) => { this.setState({ username: event.target.value }) }} type="text" name="username" value={this.state.username} />
