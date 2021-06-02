@@ -7,6 +7,7 @@ export default class GamePlayContainer extends Component {
         return (
             <div>
                 GamePlayContainer Container
+                {`Number of turns: ${this.props.turns}`}
                 <SongOptionsContainer />
                 <SelectWinnersContainer />
             </div>

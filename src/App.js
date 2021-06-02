@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import HomePageContainer from "./Container/HomePageContainer"
 import PlayerSetupContainer from "./Container/PlayerSetupContainer"
 import GameSetupContainer from "./Container/GameSetupContainer"
@@ -13,7 +14,8 @@ class App extends Component {
     this.state = {
       songs: [],
       players: [],
-      currentGame:{}
+      currentGame: {},
+      turns: 15
     }
   }
 
@@ -46,8 +48,8 @@ class App extends Component {
           game_id: this.state.currentGame.id
         })
       })
-      .then(res => res.json())
-      .then(response => console.log(response))
+        .then(res => res.json())
+        .then(response => console.log(response))
     })
   }
 
@@ -55,12 +57,12 @@ class App extends Component {
     // userObj has username and password from state
     // send it to backend
     let searchedObj = {}
-    fetch(`http://localhost:9292/users?username=${userObj.username}&password=${userObj.password}`) 
+    fetch(`http://localhost:9292/users?username=${userObj.username}&password=${userObj.password}`)
       .then(res => res.json())
       .then(searchedUserObj => {
-       searchedObj = searchedUserObj
-      //  console.log(searchedObj)
-      // console.log(searchedObj.message)
+        searchedObj = searchedUserObj
+        //  console.log(searchedObj)
+        // console.log(searchedObj.message)
         // console.log("hi")
 
         // make a post req if user not found
@@ -119,13 +121,15 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" >
-        <HomePageContainer handleNewGame={this.handleNewGame} />
-        <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames}/>
-        <GameSetupContainer />
-        <GamePlayContainer />
-        <EndOfGameContainer />
-      </div >
+      <Router>
+        <div className="App" >
+          <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
+          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} />} />
+          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} />} />
+          <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} turns={this.state.turns} />} />
+          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} />} />
+        </div >
+      </Router>
     )
   }
 }

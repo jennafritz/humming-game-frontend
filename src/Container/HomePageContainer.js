@@ -6,7 +6,10 @@ export default class HomePageContainer extends Component {
             <div>
                 HomePage Container
                 <h1>Welcome to Hummingbird</h1>
-                <button onClick={() => this.props.handleNewGame()}>Start a New Game</button>
+                <button onClick={() => {
+                    this.props.history.push("/playersetup")
+                    this.props.handleNewGame()
+                }}>Start a New Game</button>
             </div>
         )
     }

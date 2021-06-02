@@ -9,7 +9,7 @@ export default class PlayerSetupContainer extends Component {
         super()
         this.state = {
             displayLoginForm: false,
-            displayRegisterForm: false,
+            displayRegisterForm: false
         }
     }
 
@@ -34,9 +34,12 @@ export default class PlayerSetupContainer extends Component {
             <div>
                 Player Setup Container
                 <PlayersContainer players={this.props.players} />
-                {this.state.displayLoginForm ? <LoginForm toggleLoginForm = {this.toggleLoginForm} handleLogin = {this.props.handleLogin}/> : <button onClick={() => this.toggleLoginForm()} >Add registered player</button>}
-                {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm = {this.toggleRegisterForm} handleRegister = {this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
-                <button onClick={() => this.props.createUserGames()}>Start</button> 
+                {this.state.displayLoginForm ? <LoginForm toggleLoginForm={this.toggleLoginForm} handleLogin={this.props.handleLogin} /> : <button onClick={() => this.toggleLoginForm()} >Add registered player</button>}
+                {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm={this.toggleRegisterForm} handleRegister={this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
+                <button onClick={() => {
+                    this.props.history.push("/gamesetup")
+                    this.props.createUserGames()
+                }}>Start</button>
             </div>
         )
     }
