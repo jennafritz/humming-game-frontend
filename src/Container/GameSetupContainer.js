@@ -5,11 +5,10 @@ export default class GameSetupContainer extends Component {
     render() {
         return (
             <div>
-                GameSetupContainer Container
-                <DecadeButtonsContainer />
+                <DecadeButtonsContainer chooseDecade={this.props.chooseDecade}/>
                 <button onClick={() => {
                     this.props.history.push("/gameplay")
-                    // function to send four songs
+                    this.props.handleReceiveSongs()
                 }}>Start</button>
             </div>
         )

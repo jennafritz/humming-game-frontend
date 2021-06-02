@@ -15,17 +15,24 @@ class App extends Component {
       songs: [],
       players: [],
       currentGame: {},
-      turns: 15
+      turns: 15,
+      decades: []
     }
   }
 
-  handleSendSongs = () => {
-    fetch("http://localhost:9292/songs")
+  handleReceiveSongs = () => {
+    let decadeArray = this.state.decades.map(decade => {
+      return `${decade}=${decade}`
+    })
+    let decadeQuery = decadeArray.join("&")
+    console.log(decadeQuery)
+    fetch(`http://localhost:9292/songs?${decadeQuery}`)
       .then(res => res.json())
       .then((songsArray) => {
-        this.setState({
-          songs: songsArray[0]
-        })
+        console.log(songsArray)
+        // this.setState({
+        //   songs: songsArray
+        // })
       })
   }
 
@@ -119,13 +126,19 @@ class App extends Component {
       }))
   }
 
+  chooseDecade = (decade) => {
+    this.setState({
+      decades: [...this.state.decades, decade]
+    })
+  }
+
   render() {
     return (
       <Router>
         <div className="App" >
           <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
           <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} />} />
-          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} />} />
+          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} handleReceiveSongs={this.handleReceiveSongs} chooseDecade={this.chooseDecade}/>} />
           <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} turns={this.state.turns} />} />
           <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} />} />
         </div >
