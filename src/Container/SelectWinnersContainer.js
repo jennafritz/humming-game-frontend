@@ -5,8 +5,9 @@ export default class SelectWinnersContainer extends Component {
     render() {
         return (
             <div>
-                SelectWinnersContainer Container
-                <SelectWinner />
+                {this.props.players.map(player => 
+                <SelectWinner buttonStatus={this.props.buttonStatus} disableButtons={this.props.disableButtons} handleAddPoints={this.props.handleAddPoints} player={player}/>
+                )}
             </div>
         )
     }

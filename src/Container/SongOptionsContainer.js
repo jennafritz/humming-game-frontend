@@ -6,7 +6,7 @@ export default class SongOptionsContainer extends Component {
         return (
             <div>
                 SongOptionsContainer Container
-                <SongOption />
+                {this.props.currentSongs.map(song => <SongOption song={song} />)}
             </div>
         )
     }

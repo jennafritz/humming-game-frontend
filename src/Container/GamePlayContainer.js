@@ -3,12 +3,42 @@ import SongOptionsContainer from "./SongOptionsContainer"
 import SelectWinnersContainer from "./SelectWinnersContainer"
 
 export default class GamePlayContainer extends Component {
+    constructor() {
+        super()
+        this.state = {
+            buttonStatus: false,
+        }
+    }
+
+    disableButtons = () => {
+        this.setState({
+            buttonStatus: true
+        })
+    }
+
+    enableButtons = () => {
+        this.setState({
+            buttonStatus: false
+        })
+    }
+
     render() {
         return (
             <div>
-                {`Number of turns: ${this.props.turns}`}
-                <SongOptionsContainer />
-                <SelectWinnersContainer />
+                {`Remaining turns: ${this.props.turns - 1}`}
+                <SongOptionsContainer currentSongs={this.props.currentSongs}/>
+                <SelectWinnersContainer buttonStatus={this.state.buttonStatus} disableButtons={this.disableButtons} handleAddPoints={this.props.handleAddPoints} players={this.props.players}/>
+                {this.props.turns == 1 
+                    ? <button onClick={() => {
+                        this.props.handleSendPoints()
+                        this.props.history.push("/gameover")
+                        }}>Finish</button>
+                    : <button onClick={() => {
+                        this.props.makeCurrentSongs()
+                        this.props.updateTurns()
+                        this.enableButtons()
+                // this.props.handleSendPoints() only when remaining turns is 0
+                        }}>Next</button>}
             </div>
         )
     }

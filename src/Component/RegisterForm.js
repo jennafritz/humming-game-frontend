@@ -5,7 +5,8 @@ export default class RegisterForm extends Component {
         super()
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            point: 0
         }
     }
 
