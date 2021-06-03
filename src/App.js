@@ -113,25 +113,29 @@ class App extends Component {
   handleLogin = (userObj) => {
     // userObj has username and password from state
     // send it to backend
-    let searchedObj = {}
-    fetch(`http://localhost:9292/users?username=${userObj.username}&password=${userObj.password}`)
-      .then(res => res.json())
-      .then(searchedUserObj => {
-        searchedObj = searchedUserObj
+    let userExists = this.state.players.find(player => player.username === userObj.username)
+    if (userExists === undefined) {
+      let searchedObj = {}
+      fetch(`http://localhost:9292/users?username=${userObj.username}&password=${userObj.password}`)
+        .then(res => res.json())
+        .then(searchedUserObj => {
+          searchedObj = searchedUserObj
 
-        // make a post req if user not found
-        if (searchedObj.message === "User does not exist") {
-          alert("User not found. Please register to continue.")
-        }
-        // otherwise get the user
-        else {
-          this.setState({
-            players: [...this.state.players, { ...searchedObj, currentPoints: 0 }]
-          })
-          // console.log("Fetch error")
-        }
+          // make a post req if user not found
+          if (searchedObj.message === "User does not exist") {
+            alert("User not found. Please register to continue.")
+          }
+          // otherwise get the user
+          else {
+            this.setState({
+              players: [...this.state.players, { ...searchedObj, currentPoints: 0 }]
+            })
+            // console.log("Fetch error")
+          }
 
-      })
+        })
+    } else
+      alert("This player is already in your game!")
   }
 
 
@@ -221,15 +225,37 @@ class App extends Component {
     })
   }
 
+  removePlayers = (newPlayerObj) => {
+    let userExists = this.state.players.find(player => player.id === newPlayerObj.id)
+    if (userExists) {
+      let keptPlayers = this.state.players.filter(player => player.id !== newPlayerObj.id)
+      this.setState({
+        players: keptPlayers
+      })
+    }
+  }
+
+  refresh = () => {
+    this.setState({
+      songs: [],
+      players: [],
+      currentGame: {},
+      turns: 0,
+      decades: [],
+      currentSongs: [],
+      winners: []
+    })
+  }
+
   render() {
     return (
       <Router>
         <div className="App" >
           <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
-          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} setTurns={this.setTurns}/>} />
-          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} chooseDecade={this.chooseDecade} />} />
+          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} setTurns={this.setTurns} turns={this.state.turns} removePlayers={this.removePlayers} />} />
+          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} decades={this.state.decades} chooseDecade={this.chooseDecade} />} />
           <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players} sortPlayers={this.sortPlayers} />} />
-          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} />} />
+          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} refresh={this.refresh} />} />
         </div >
       </Router>
     )

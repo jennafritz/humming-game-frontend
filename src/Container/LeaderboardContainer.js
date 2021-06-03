@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import LeaderboardItem from "../Component/LeaderboardItem"
 
 export default class LeaderboardContainer extends Component {
-    
+
     constructor() {
         super()
         this.state = {
@@ -20,8 +20,16 @@ export default class LeaderboardContainer extends Component {
 
     render() {
         return (
-            <div className="flex">
-                {this.state.leaderboard.map(player => <LeaderboardItem player={player} />)}
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Total Points</th>
+                        </tr>
+                    </thead>
+                    {this.state.leaderboard.map(player => <LeaderboardItem player={player} />)}
+                </table>
             </div>
         )
     }

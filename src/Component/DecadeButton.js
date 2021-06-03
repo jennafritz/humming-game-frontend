@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 
 export default class DecadeButton extends Component {
-    
+
     // chooseDecade = () => {
     // fetch(`http://localhost:9292/decades?year=${this.props.value}`) 
     //   .then(res => res.json())
@@ -14,7 +14,7 @@ export default class DecadeButton extends Component {
     render() {
         return (
             <div>
-                <button onClick={() => this.props.chooseDecade(this.props.value)}>{this.props.name}</button>
+                <button className={this.props.decades.some(decade => decade === this.props.value) ? "button-clicked" : "button-unclicked"} onClick={() => this.props.chooseDecade(this.props.value)}>{this.props.name}</button>
             </div>
         )
     }

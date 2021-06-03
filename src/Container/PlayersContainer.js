@@ -5,7 +5,7 @@ export default class PlayersContainer extends Component {
     render() {
         return (
             <div className="flex">
-                {this.props.players.map(player => <Player key={player.id} name={player.username}/>)}
+                {this.props.players.map(player => <Player key={player.id} player={player} removePlayers={this.props.removePlayers} />)}
             </div>
         )
     }

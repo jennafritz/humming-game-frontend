@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import PlayersContainer from "./PlayersContainer"
+import TurnForm from "../Component/TurnForm"
 import LoginForm from "../Component/LoginForm"
 import RegisterForm from "../Component/RegisterForm"
-import TurnForm from "../Component/TurnForm"
+import LoginFormModal from "./LoginFormModal"
 
 export default class PlayerSetupContainer extends Component {
 
@@ -10,8 +11,15 @@ export default class PlayerSetupContainer extends Component {
         super()
         this.state = {
             displayLoginForm: false,
-            displayRegisterForm: false
+            displayRegisterForm: false,
+            modalShow: false
         }
+    }
+
+    setModalShow = (status) => {
+        this.setState({
+            modalShow: status
+        })
     }
 
     toggleLoginForm = () => {
@@ -32,17 +40,22 @@ export default class PlayerSetupContainer extends Component {
 
     render() {
         return (
-            <div className="flex">
+            <div className="container-div flex">
                 <h2>Set Up Your Game</h2>
                 <h3>Add Players</h3>
-                
-                <PlayersContainer players={this.props.players} />
+
+                <PlayersContainer players={this.props.players} removePlayers={this.props.removePlayers} />
+
+                {/* <LoginFormModal show={this.state.modalShow} onHide={() => this.setModalShow(false)} handleRegister={this.props.handleRegister} handleLogin={this.props.handleLogin} />
+                <button onClick={() => this.setModalShow(true)} >Add Player</button> */}
+
                 {this.state.displayLoginForm ? <LoginForm toggleLoginForm={this.toggleLoginForm} handleLogin={this.props.handleLogin} /> : <button onClick={() => this.toggleLoginForm()} >Add registered player</button>}
                 {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm={this.toggleRegisterForm} handleRegister={this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
                 <h3>Select Number Of Turns</h3>
-                <TurnForm setTurns={this.props.setTurns} history={this.props.history} createUserGames={this.props.createUserGames}/>
 
-                
+                <TurnForm setTurns={this.props.setTurns} history={this.props.history} createUserGames={this.props.createUserGames} players={this.props.players} turns={this.props.turns} />
+
+
             </div>
         )
     }
