@@ -4,7 +4,7 @@ import DecadeButtonsContainer from "./DecadeButtonsContainer"
 export default class GameSetupContainer extends Component {
     render() {
         return (
-            <div>
+            <div className="flex">
                 <DecadeButtonsContainer chooseDecade={this.props.chooseDecade}/>
                 <button onClick={() => {
                     this.props.history.push("/gameplay")

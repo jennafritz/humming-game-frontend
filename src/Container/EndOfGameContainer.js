@@ -7,7 +7,7 @@ export default class EndOfGameContainer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="flex">
                 {this.props.winners.map(winner => {
                     return `Congratulations, ${winner.username}, you won with ${winner.currentPoints} points!`
                 })}

@@ -6,7 +6,7 @@ import GameSetupContainer from "./Container/GameSetupContainer"
 import GamePlayContainer from "./Container/GamePlayContainer"
 import EndOfGameContainer from "./Container/EndOfGameContainer"
 import LeaderboardContainer from "./Container/LeaderboardContainer"
-// import './App.css';
+import './App.css';
 
 class App extends Component {
 
@@ -16,7 +16,7 @@ class App extends Component {
       songs: [],
       players: [],
       currentGame: {},
-      turns: 15,
+      turns: 0,
       decades: [],
       currentSongs: [],
       winners: []
@@ -27,9 +27,10 @@ class App extends Component {
     let decadeArray = this.state.decades.map(decade => {
       return `${decade}=${decade}`
     })
+    let numSongs = this.state.turns * 4
     let decadeQuery = decadeArray.join("&")
     console.log(decadeQuery)
-    fetch(`http://localhost:9292/songs?${decadeQuery}`)
+    fetch(`http://localhost:9292/songs?${decadeQuery}&numSongs=${numSongs}`)
       .then(res => res.json())
       .then((songsArray) => {
         // console.log(songsArray)
@@ -214,12 +215,18 @@ class App extends Component {
     })
   }
 
+  setTurns = (numTurns) => {
+    this.setState({
+      turns: numTurns
+    })
+  }
+
   render() {
     return (
       <Router>
         <div className="App" >
           <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
-          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} />} />
+          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} setTurns={this.setTurns}/>} />
           <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} chooseDecade={this.chooseDecade} />} />
           <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players} sortPlayers={this.sortPlayers} />} />
           <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} />} />

@@ -20,7 +20,7 @@ export default class LeaderboardContainer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="flex">
                 {this.state.leaderboard.map(player => <LeaderboardItem player={player} />)}
             </div>
         )

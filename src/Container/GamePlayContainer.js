@@ -26,7 +26,7 @@ export default class GamePlayContainer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="flex">
                 {`Remaining turns: ${this.props.turns - 1}`}
                 <SongOptionsContainer currentSongs={this.props.currentSongs} />
                 <SelectWinnersContainer buttonStatus={this.state.buttonStatus} disableButtons={this.disableButtons} handleAddPoints={this.props.handleAddPoints} players={this.props.players} />
