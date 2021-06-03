@@ -19,6 +19,7 @@ class App extends Component {
       turns: 15,
       decades: [],
       currentSongs: [],
+      winners: []
     }
   }
 
@@ -40,7 +41,7 @@ class App extends Component {
   }
 
   handleAddPoints = (player) => {
-    let playerWinner = ({...player,point:player.point + 10})
+    let playerWinner = ({ ...player, point: player.point + 10, currentPoints: player.currentPoints + 10 })
     let updatedPlayers = this.state.players.map(playerInstance => playerInstance.id === player.id ? playerWinner : playerInstance)
     this.setState({
       players: updatedPlayers
@@ -68,13 +69,13 @@ class App extends Component {
 
   makeCurrentSongs = () => {
     let updatedArray = this.state.songs
-    let currentSongs = updatedArray.splice(0,4)
+    let currentSongs = updatedArray.splice(0, 4)
     this.setState({
       songs: updatedArray,
       currentSongs: currentSongs
     })
     // let currentSongs = this.state.songs.shift(4)
-    console.log("all remaining songs: ",this.state.songs.length)
+    console.log("all remaining songs: ", this.state.songs.length)
     console.log("current songs: ", currentSongs)
   }
 
@@ -124,7 +125,7 @@ class App extends Component {
         // otherwise get the user
         else {
           this.setState({
-            players: [...this.state.players, searchedObj]
+            players: [...this.state.players, { ...searchedObj, currentPoints: 0 }]
           })
           // console.log("Fetch error")
         }
@@ -135,31 +136,35 @@ class App extends Component {
 
   handleRegister = (userObj) => {
     // add check if user exists
-    let searchedObj = {}
-    fetch(`http://localhost:9292/check_user?username=${userObj.username}`)
-    .then(res => res.json())
-    .then(searchedUserObj => {
-      searchedObj = searchedUserObj
-      if (searchedObj.message === "User does not exist") {
-    fetch("http://localhost:9292/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userObj)
-    })
-      .then(res => res.json())
-      .then(newUserObj => {
-        this.setState({
-          players: [...this.state.players, newUserObj]
+    if (userObj.username.length > 0) {
+      let searchedObj = {}
+      fetch(`http://localhost:9292/check_user?username=${userObj.username}`)
+        .then(res => res.json())
+        .then(searchedUserObj => {
+          searchedObj = searchedUserObj
+          if (searchedObj.message === "User does not exist") {
+            fetch("http://localhost:9292/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(userObj)
+            })
+              .then(res => res.json())
+              .then(newUserObj => {
+                this.setState({
+                  players: [...this.state.players, { ...newUserObj, currentPoints: 0 }]
+                })
+              }
+                // newUserObj => console.log(newUserObj)
+              )
+          }
+          else {
+            alert("This username is already taken")
+          }
         })
-      }
-        // newUserObj => console.log(newUserObj)
-      )}
-      else {
-      alert("This username is already taken")
-      }
-    })
+    } else
+      alert("Please enter a valid username to register.")
   }
 
 
@@ -183,17 +188,31 @@ class App extends Component {
   }
 
   chooseDecade = (decade) => {
-    if(this.state.decades.includes(decade)){
+    if (this.state.decades.includes(decade)) {
       let uniqueDecades = this.state.decades.filter(existingDecade => existingDecade != decade)
-    this.setState({
-      decades: uniqueDecades
-    })
+      this.setState({
+        decades: uniqueDecades
+      })
     }
     else {
       this.setState({
         decades: [...this.state.decades, decade]
       })
-    }}
+    }
+  }
+
+  sortPlayers = () => {
+    let sorted = this.state.players.sort((playerA, playerB) => {
+      return playerB.currentPoints - playerA.currentPoints
+    })
+    let highestScore = sorted[0].currentPoints
+    let winners = sorted.filter(player => {
+      return player.currentPoints === highestScore
+    })
+    this.setState({
+      winners: winners
+    })
+  }
 
   render() {
     return (
@@ -201,9 +220,9 @@ class App extends Component {
         <div className="App" >
           <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
           <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} />} />
-          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} chooseDecade={this.chooseDecade}/>} />
-          <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players}/>} />
-          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} />} />
+          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} chooseDecade={this.chooseDecade} />} />
+          <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players} sortPlayers={this.sortPlayers} />} />
+          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} />} />
         </div >
       </Router>
     )

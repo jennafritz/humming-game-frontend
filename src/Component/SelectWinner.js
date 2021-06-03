@@ -7,7 +7,7 @@ export default class SelectWinner extends Component {
                 <button disabled={this.props.buttonStatus} onClick={() => {
                     this.props.handleAddPoints(this.props.player)
                     this.props.disableButtons()
-                    }}>{this.props.player.username}</button>
+                }}>{this.props.player.username} - {this.props.player.currentPoints}</button>
             </div>
         )
     }
