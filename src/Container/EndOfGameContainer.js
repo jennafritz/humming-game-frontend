@@ -28,14 +28,6 @@ export default class EndOfGameContainer extends Component {
                     }
                 </h2>
 
-                {/* {if (this.props.winners.count == 1) {
-                    return `Congratulations, ${this.props.winners.username}, you won this round with ${winner.currentPoints} points!`
-                } else {
-                    return `there are multiple winners`
-                // this.props.winners.map(winner => {
-                //     return `Congratulations, ${winner.username}, you won with ${winner.currentPoints} points!`
-                // })}
-                } */}
                 <h3>Leaderboard</h3>
                 <LeaderboardContainer />
                 <button onClick={() => {

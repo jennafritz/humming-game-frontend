@@ -11,7 +11,7 @@ export default class LeaderboardContainer extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:9292/leaderboard")
+        fetch("https://peaceful-meadow-03064.herokuapp.com/leaderboard")
             .then(res => res.json())
             .then(leaderboardArray => this.setState({
                 leaderboard: leaderboardArray
