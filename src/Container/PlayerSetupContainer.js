@@ -53,7 +53,7 @@ export default class PlayerSetupContainer extends Component {
                 {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm={this.toggleRegisterForm} handleRegister={this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
                 <h3>Select Number Of Turns</h3>
 
-                <TurnForm setTurns={this.props.setTurns} history={this.props.history} createUserGames={this.props.createUserGames} players={this.props.players} turns={this.props.turns} />
+                <TurnForm setTurns={this.props.setTurns} history={this.props.history} createUserGames={this.props.createUserGames} players={this.props.players} turns={this.props.turns} handleNewGame={this.props.handleNewGame} />
 
 
             </div>

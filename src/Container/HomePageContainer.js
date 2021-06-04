@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import HummingbirdPhoto from "../hummingbird copy.png"
 
 export default class HomePageContainer extends Component {
     render() {
@@ -9,8 +10,8 @@ export default class HomePageContainer extends Component {
                     <br />
                     <button onClick={() => {
                         this.props.history.push("/playersetup")
-                        this.props.handleNewGame()
                     }}>Start a New Game</button>
+                    <img id="hummingbird-img" src={HummingbirdPhoto}></img>
                 </div>
             </div>
         )

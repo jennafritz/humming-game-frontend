@@ -13,16 +13,16 @@ export default class TurnForm extends Component {
             <div>
                 <form onSubmit={(event) => {
                     event.preventDefault()
-                    if (this.props.players.length < 2) {
+                    if (this.props.players.length < 3) {
                         alert("More Players = More Fun")
                     }
                     if (this.state.numTurns === 0) {
                         alert("More Turns = More Fun")
                     }
-                    if (this.props.players.length >= 2 && this.state.numTurns > 0) {
+                    if (this.props.players.length >= 3 && this.state.numTurns > 0) {
                         this.props.setTurns(this.state.numTurns)
                         this.props.history.push("/gamesetup")
-                        this.props.createUserGames()
+                        this.props.handleNewGame()
                     }
                 }}>
                     <label >

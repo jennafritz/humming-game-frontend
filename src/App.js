@@ -190,6 +190,7 @@ class App extends Component {
       .then((newGameInstance) => this.setState({
         currentGame: newGameInstance
       }))
+      .then(() => this.createUserGames())
   }
 
   chooseDecade = (decade) => {
@@ -247,15 +248,26 @@ class App extends Component {
     })
   }
 
+  refreshExceptWinners = () => {
+    this.setState({
+      songs: [],
+      players: [],
+      currentGame: {},
+      turns: 0,
+      decades: [],
+      currentSongs: [],
+    })
+  }
+
   render() {
     return (
       <Router>
         <div className="App" >
-          <Route exact path="/" render={(routerProps) => <HomePageContainer handleNewGame={this.handleNewGame} {...routerProps} />} />
-          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} setTurns={this.setTurns} turns={this.state.turns} removePlayers={this.removePlayers} />} />
-          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} decades={this.state.decades} chooseDecade={this.chooseDecade} />} />
-          <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players} sortPlayers={this.sortPlayers} />} />
-          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} refresh={this.refresh} />} />
+          <Route exact path="/" render={(routerProps) => <HomePageContainer {...routerProps} />} />
+          <Route exact path="/playersetup" render={(routerProps) => <PlayerSetupContainer handleLogin={this.handleLogin} handleRegister={this.handleRegister} players={this.state.players} createUserGames={this.createUserGames} {...routerProps} setTurns={this.setTurns} turns={this.state.turns} removePlayers={this.removePlayers} handleNewGame={this.handleNewGame}/>} />
+          <Route exact path="/gamesetup" render={(routerProps) => <GameSetupContainer {...routerProps} makeCurrentSongs={this.makeCurrentSongs} handleReceiveSongs={this.handleReceiveSongs} decades={this.state.decades} chooseDecade={this.chooseDecade} players={this.state.players} turns={this.state.turns}/>} />
+          <Route exact path="/gameplay" render={(routerProps) => <GamePlayContainer {...routerProps} handleAddPoints={this.handleAddPoints} updateTurns={this.updateTurns} makeCurrentSongs={this.makeCurrentSongs} currentSongs={this.state.currentSongs} turns={this.state.turns} handleSendPoints={this.handleSendPoints} players={this.state.players} sortPlayers={this.sortPlayers}/>} />
+          <Route exact path="/gameover" render={(routerProps) => <EndOfGameContainer {...routerProps} winners={this.state.winners} refresh={this.refresh} refreshExceptWinners={this.refreshExceptWinners}/>} />
         </div >
       </Router>
     )

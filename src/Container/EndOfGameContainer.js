@@ -4,12 +4,15 @@ import LeaderboardContainer from "../Container/LeaderboardContainer.js"
 export default class EndOfGameContainer extends Component {
 
 
+    componentDidMount() {
+       this.props.refreshExceptWinners()
+    }
 
-
-
+    
 
 
     render() {
+        // this.props.history.push("/")
         return (
             <div className="flex">
                 <h2 className="winner-declaration">
@@ -18,7 +21,9 @@ export default class EndOfGameContainer extends Component {
                         ? `Congratulations ${this.props.winners.map(winner => {
                             return winner.username
                         }).join(' and ')}, you tied for first place with ${this.props.winners[0].currentPoints} points!`
-                        : `Congratulations ${this.props.winners[0].username}, you won with ${this.props.winners[0].currentPoints} points!`
+                        : this.props.winners.length === 1
+                        ? `Congratulations ${this.props.winners[0].username}, you won with ${this.props.winners[0].currentPoints} points!`
+                        : null
 
                     }
                 </h2>
