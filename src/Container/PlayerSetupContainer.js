@@ -3,7 +3,7 @@ import PlayersContainer from "./PlayersContainer"
 import TurnForm from "../Component/TurnForm"
 import LoginForm from "../Component/LoginForm"
 import RegisterForm from "../Component/RegisterForm"
-import LoginFormModal from "./LoginFormModal"
+
 
 export default class PlayerSetupContainer extends Component {
 
@@ -46,8 +46,6 @@ export default class PlayerSetupContainer extends Component {
 
                 <PlayersContainer players={this.props.players} removePlayers={this.props.removePlayers} />
 
-                {/* <LoginFormModal show={this.state.modalShow} onHide={() => this.setModalShow(false)} handleRegister={this.props.handleRegister} handleLogin={this.props.handleLogin} />
-                <button onClick={() => this.setModalShow(true)} >Add Player</button> */}
 
                 {this.state.displayLoginForm ? <LoginForm toggleLoginForm={this.toggleLoginForm} handleLogin={this.props.handleLogin} /> : <button onClick={() => this.toggleLoginForm()} >Add registered player</button>}
                 {this.state.displayRegisterForm ? <RegisterForm toggleRegisterForm={this.toggleRegisterForm} handleRegister={this.props.handleRegister} /> : <button onClick={() => this.toggleRegisterForm()} >Register player</button>}
