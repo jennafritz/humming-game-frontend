@@ -8,6 +8,7 @@ export default class HomePageContainer extends Component {
                 <div className="inner-div" >
                     <h1>Hummingbird</h1>
                     <br />
+
                     <button onClick={() => {
                         this.props.history.push("/playersetup")
                     }}>Start a New Game</button>
